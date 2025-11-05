@@ -13,13 +13,28 @@ const Contact = () => {
   });
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Message Sent!",
-      description: "Thanks for reaching out. I'll get back to you soon!",
-    });
-    setFormData({ name: "", email: "", message: "" });
+    try {
+      const res = await fetch("https://autoblogn8n.zooq.app/webhook/contact", {
+        body: JSON.stringify(formData),
+        method: "POST",
+      });
+      const data = await res.json();
+      if (data) {
+        toast({
+          title: "Message Sent!",
+          description: "Thanks for reaching out. I'll get back to you soon!",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Failed To Message Sent!",
+        description: JSON.stringify(error),
+      });
+    } finally {
+      setFormData({ name: "", email: "", message: "" });
+    }
   };
 
   const socialLinks = [
@@ -105,14 +120,18 @@ const Contact = () => {
             </div>
 
             {/* Contact Info */}
-            <div className="space-y-6 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
+            <div
+              className="space-y-6 animate-fade-in-up"
+              style={{ animationDelay: "0.2s" }}
+            >
               <div className="glass rounded-2xl p-8">
                 <h3 className="text-2xl font-bold text-foreground mb-6">
                   Let's Collaborate
                 </h3>
                 <p className="text-foreground/80 leading-relaxed mb-6">
-                  I'm always interested in hearing about new projects and opportunities.
-                  Whether you have a question or just want to say hi, feel free to reach out!
+                  I'm always interested in hearing about new projects and
+                  opportunities. Whether you have a question or just want to say
+                  hi, feel free to reach out!
                 </p>
                 <div className="space-y-4">
                   {socialLinks.map((link, index) => (
@@ -123,7 +142,9 @@ const Contact = () => {
                       rel="noopener noreferrer"
                       className="flex items-center gap-3 p-3 rounded-lg bg-background/30 hover:bg-background/50 transition-all duration-300 hover:scale-105 group"
                     >
-                      <div className={`${link.color} group-hover:scale-110 transition-transform`}>
+                      <div
+                        className={`${link.color} group-hover:scale-110 transition-transform`}
+                      >
                         {link.icon}
                       </div>
                       <span className="text-foreground/90 font-medium">
