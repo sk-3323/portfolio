@@ -1,73 +1,67 @@
-# Welcome to your Lovable project
+# 🚀 Shubham Kaniya — Personal Portfolio
 
-## Project info
+> A modern, animated, and interactive portfolio built with **Next.js**, **Tailwind CSS**, and **Framer Motion** to showcase my projects, skills, and experience as a MERN Stack Developer.
 
-**URL**: https://lovable.dev/projects/2c593f82-b5a0-495a-9e84-d08185904de4
+---
 
-## How can I edit this code?
+## 🧠 About
 
-There are several ways of editing your application.
+Hey there! I’m **Shubham Kaniya**, a **MERN Stack Developer** passionate about crafting clean, scalable, and high-performing web applications.  
+I love blending design with functionality — turning ideas into powerful digital experiences.
 
-**Use Lovable**
+This portfolio reflects my journey in web development, from building AI-powered tools to managing full-stack apps and automation workflows.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/2c593f82-b5a0-495a-9e84-d08185904de4) and start prompting.
+🌐 **Live Site:** [https://shubhamkaniya.netlify.app/](https://shubhamkaniya.netlify.app/)
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## 🛠️ Tech Stack
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
+**Frontend:**
+- Next.js
+- React.js
 - Tailwind CSS
+- TypeScript
+- Framer Motion (for animations)
+- Shadcn/UI
 
-## How can I deploy this project?
+**Backend:**
+- Node.js
+- Express.js
+- Prisma ORM
 
-Simply open [Lovable](https://lovable.dev/projects/2c593f82-b5a0-495a-9e84-d08185904de4) and click on Share -> Publish.
+**Database:**
+- MongoDB
+- PostgreSQL
+- Supabase
 
-## Can I connect a custom domain to my Lovable project?
+**Deployment & Tools:**
+- Vercel
+- Netlify
+- Docker
+- Git & GitHub
 
-Yes, you can!
+---
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🎨 Features
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+✨ **Animated UI** — Built with Framer Motion for smooth transitions and interactive scroll effects  
+🧩 **Dynamic Project Showcase** — Displays live demos and tech stacks for each project  
+⚡ **Responsive Design** — Works perfectly across all devices  
+🌈 **Dark/Light Mode** — Smooth theme switcher with gradient aesthetics  
+🤖 **Optional AI Assistant (coming soon)** — Chat with an AI about my portfolio and skills  
+📬 **Contact Form** — Directly send messages from the site  
+
+---
+
+## 🧩 Sections Overview
+
+1. **Hero Section** — Intro, tagline, and call-to-action buttons  
+2. **About Me** — My journey, skills, and goals  
+3. **Skills** — All tech stacks represented as glowing badges  
+4. **Projects** — Interactive cards with links and project info  
+5. **Experience** — Timeline showing internships and work roles  
+6. **Contact** — Form and social links for easy connection  
+
+## 🧱 Folder Structure
+
