@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Download } from "lucide-react";
+import { ArrowRight, Download, Eye } from "lucide-react";
 
 const Hero = () => {
   return (
@@ -59,7 +59,7 @@ const Hero = () => {
               onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
             >
               View Projects
-              <Download className="ml-2 h-5 w-5" />
+              <Eye className="ml-2 h-5 w-5" />
             </Button>
           </div>
         </div>
