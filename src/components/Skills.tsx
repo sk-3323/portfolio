@@ -18,12 +18,13 @@ const Skills = () => {
         "Node.js",
         "Express.js",
         "Prisma",
-        "REST APIs",
-        "GraphQL",
-        "PostgresQl",
-        "Supabase",
+        "RabbitMQ",
+        "Nginx",
         "n8n",
-        "make.com"
+        "make.com",
+        "Redis",
+        "Supabase",
+        "RAG"
       ],
     },
     {
@@ -31,8 +32,6 @@ const Skills = () => {
       skills: [
         "MongoDB",
         "PostgreSQL",
-        "MySQL",
-        "Redis",
       ],
     },
     {
