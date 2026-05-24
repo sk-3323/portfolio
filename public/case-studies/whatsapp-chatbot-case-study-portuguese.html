@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr. Weidson AI — WhatsApp Chatbot Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #25D366;
+    --green-dark: #128C7E;
+    --green-pale: #DCF8C6;
+    --ink: #0d1117;
+    --ink2: #1e2631;
+    --muted: #5c6a7a;
+    --muted2: #8a97a6;
+    --line: rgba(255,255,255,0.08);
+    --card-bg: #131b24;
+    --card-border: rgba(255,255,255,0.07);
+    --accent: #25D366;
+    --accent2: #128C7E;
+    --gold: #f4c44a;
+    --coral: #ff6b6b;
+    --blue: #4da6ff;
+    --purple: #a78bfa;
+    --white: #ffffff;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Instrument Sans', sans-serif;
+    background: #0b1219;
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── BG TEXTURE ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 800px 600px at 10% 20%, rgba(37,211,102,0.04) 0%, transparent 70%),
+      radial-gradient(ellipse 600px 400px at 90% 80%, rgba(18,140,126,0.05) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 3rem;
+    background: rgba(11,18,25,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--green);
+    letter-spacing: 0.05em;
+    text-decoration: none;
+  }
+
+  .nav-logo .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--green); }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 8rem 3rem 4rem;
+  }
+
+  .hero-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(37,211,102,0.1);
+    border: 1px solid rgba(37,211,102,0.25);
+    border-radius: 100px;
+    padding: 4px 14px;
+    font-size: 0.8rem;
+    font-family: 'DM Mono', monospace;
+    color: var(--green);
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--green);
+  }
+
+  .hero-desc {
+    font-size: 1.1rem;
+    color: var(--text2);
+    max-width: 540px;
+    margin-bottom: 2.5rem;
+    line-height: 1.75;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .hero-stat .number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.2rem;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .hero-stat .number span {
+    color: var(--green);
+  }
+
+  .hero-stat .label {
+    font-size: 0.8rem;
+    color: var(--text2);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ─── PHONE MOCKUP ─── */
+  .phone-wrap {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  .phone {
+    width: 280px;
+    background: #1a1a2e;
+    border-radius: 36px;
+    border: 2px solid rgba(255,255,255,0.1);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.03);
+  }
+
+  .phone-status {
+    background: #128C7E;
+    padding: 10px 16px 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .phone-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: #25D366;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #000;
+    flex-shrink: 0;
+  }
+
+  .phone-contact { flex: 1; }
+
+  .phone-contact .name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .phone-contact .status {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.7);
+    margin-top: 2px;
+  }
+
+  .phone-body {
+    background: #0b141a;
+    padding: 12px;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .chat-date {
+    text-align: center;
+    font-size: 0.65rem;
+    color: var(--text2);
+    font-family: 'DM Mono', monospace;
+    margin: 4px 0;
+  }
+
+  .bubble {
+    max-width: 88%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    position: relative;
+  }
+
+  .bubble.user {
+    background: #005c4b;
+    color: #fff;
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+  }
+
+  .bubble.bot {
+    background: #202c33;
+    color: #e9edef;
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+  }
+
+  .bubble-time {
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.45);
+    text-align: right;
+    margin-top: 2px;
+    display: block;
+  }
+
+  .typing {
+    background: #202c33;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border-bottom-left-radius: 2px;
+    align-self: flex-start;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .typing span {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #8696a0;
+    animation: blink 1.2s infinite;
+  }
+
+  .typing span:nth-child(2) { animation-delay: 0.2s; }
+  .typing span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes blink {
+    0%, 80%, 100% { transform: scale(1); opacity: 0.5; }
+    40% { transform: scale(1.2); opacity: 1; }
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 6rem 3rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--green);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--green);
+  }
+
+  h2.section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  .section-sub {
+    font-size: 1rem;
+    color: var(--text2);
+    max-width: 600px;
+    line-height: 1.75;
+    margin-bottom: 3.5rem;
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--line), transparent);
+    margin: 0 3rem;
+  }
+
+  /* ─── PROBLEM CARDS ─── */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .problem-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .problem-card:hover {
+    border-color: rgba(37,211,102,0.2);
+    transform: translateY(-2px);
+  }
+
+  .problem-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .problem-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    color: var(--white);
+    margin-bottom: 0.6rem;
+  }
+
+  .problem-card p {
+    font-size: 0.875rem;
+    color: var(--text2);
+    line-height: 1.7;
+  }
+
+  /* ─── ARCHITECTURE ─── */
+  .arch-section { background: transparent; }
+
+  .arch-flow {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .arch-flow::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--green), var(--green-dark), transparent);
+  }
+
+  .flow-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    align-items: center;
+  }
+
+  .flow-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1rem 0.5rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .flow-node:hover { transform: translateY(-3px); }
+
+  .flow-node .icon-wrap {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    border: 1px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+    transition: border-color 0.3s, background 0.3s;
+    background: rgba(255,255,255,0.02);
+  }
+
+  .flow-node:hover .icon-wrap {
+    border-color: rgba(37,211,102,0.35);
+    background: rgba(37,211,102,0.05);
+  }
+
+  .flow-node .node-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 0.2rem;
+  }
+
+  .flow-node .node-sub {
+    font-size: 0.7rem;
+    color: var(--text2);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--green);
+    font-size: 1.2rem;
+    opacity: 0.5;
+  }
+
+  /* ─── WORKFLOWS ─── */
+  .workflows-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .workflow-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: border-color 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .workflow-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .workflow-card.main::after { background: linear-gradient(90deg, var(--green), var(--green-dark)); }
+  .workflow-card.consult::after { background: linear-gradient(90deg, var(--blue), var(--purple)); }
+  .workflow-card.payment::after { background: linear-gradient(90deg, var(--gold), #e88c0e); }
+  .workflow-card.followup::after { background: linear-gradient(90deg, var(--coral), #e63946); }
+
+  .workflow-card:hover { border-color: rgba(255,255,255,0.15); }
+
+  .wf-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .wf-badge {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .wf-badge.main { background: rgba(37,211,102,0.15); }
+  .wf-badge.consult { background: rgba(77,166,255,0.15); }
+  .wf-badge.payment { background: rgba(244,196,74,0.15); }
+  .wf-badge.followup { background: rgba(255,107,107,0.15); }
+
+  .wf-title { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--white); margin-bottom: 0.2rem; }
+  .wf-subtitle { font-size: 0.78rem; color: var(--text2); font-family: 'DM Mono', monospace; }
+
+  .wf-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .wf-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.825rem;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  .step-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+    background: var(--muted2);
+  }
+
+  .step-dot.green { background: var(--green); }
+  .step-dot.blue { background: var(--blue); }
+  .step-dot.gold { background: var(--gold); }
+  .step-dot.coral { background: var(--coral); }
+
+  .wf-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-family: 'DM Mono', monospace;
+    margin-top: 1rem;
+  }
+
+  .wf-tag.green { background: rgba(37,211,102,0.12); color: var(--green); }
+  .wf-tag.blue { background: rgba(77,166,255,0.12); color: var(--blue); }
+  .wf-tag.gold { background: rgba(244,196,74,0.12); color: var(--gold); }
+  .wf-tag.coral { background: rgba(255,107,107,0.12); color: var(--coral); }
+
+  /* ─── TECH STACK ─── */
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  .tech-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s;
+    cursor: default;
+  }
+
+  .tech-card:hover {
+    border-color: rgba(37,211,102,0.2);
+    transform: translateY(-2px);
+  }
+
+  .tech-logo {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .tech-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--white);
+    margin-bottom: 0.25rem;
+  }
+
+  .tech-desc {
+    font-size: 0.75rem;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  /* ─── RESULTS ─── */
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+
+  .result-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .result-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .result-card:nth-child(1)::before { background: var(--green); }
+  .result-card:nth-child(2)::before { background: var(--blue); }
+  .result-card:nth-child(3)::before { background: var(--gold); }
+  .result-card:nth-child(4)::before { background: var(--purple); }
+
+  .result-card:hover {
+    border-color: rgba(255,255,255,0.12);
+    transform: translateY(-3px);
+  }
+
+  .result-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .result-card:nth-child(1) .result-number { color: var(--green); }
+  .result-card:nth-child(2) .result-number { color: var(--blue); }
+  .result-card:nth-child(3) .result-number { color: var(--gold); }
+  .result-card:nth-child(4) .result-number { color: var(--purple); }
+
+  .result-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 0.35rem;
+  }
+
+  .result-desc {
+    font-size: 0.73rem;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  /* ─── CONVERSATION DEMO ─── */
+  .demo-section {
+    background: transparent;
+  }
+
+  .demo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .demo-phone-wrap {
+    position: sticky;
+    top: 100px;
+  }
+
+  .demo-phone {
+    background: #0b141a;
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.1);
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .demo-phone-header {
+    background: #1f2c34;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .demo-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #000;
+    flex-shrink: 0;
+  }
+
+  .demo-name { font-size: 0.9rem; font-weight: 600; color: #e9edef; }
+  .demo-status { font-size: 0.72rem; color: var(--green); }
+
+  .demo-messages {
+    padding: 16px;
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow: hidden;
+  }
+
+  .dm-date {
+    text-align: center;
+    font-size: 0.65rem;
+    color: var(--text2);
+    font-family: 'DM Mono', monospace;
+    margin: 4px 0;
+  }
+
+  .dm { max-width: 86%; padding: 9px 13px; border-radius: 8px; font-size: 0.8rem; line-height: 1.55; }
+  .dm.u { background: #005c4b; color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; }
+  .dm.b { background: #202c33; color: #e9edef; align-self: flex-start; border-bottom-left-radius: 2px; }
+  .dm-time { font-size: 0.6rem; color: rgba(255,255,255,0.4); text-align: right; margin-top: 3px; display: block; }
+
+  .scenario-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    padding: 6px 16px;
+    border-radius: 100px;
+    border: 1px solid var(--card-border);
+    background: transparent;
+    color: var(--text2);
+    font-size: 0.78rem;
+    font-family: 'Instrument Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab-btn.active, .tab-btn:hover {
+    background: rgba(37,211,102,0.12);
+    border-color: rgba(37,211,102,0.3);
+    color: var(--green);
+  }
+
+  .scenario-panel { display: none; }
+  .scenario-panel.active { display: block; }
+
+  .scenario-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+
+  .scenario-desc {
+    font-size: 0.875rem;
+    color: var(--text2);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.825rem;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  .feature-item .check {
+    color: var(--green);
+    font-size: 0.9rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ─── TIMELINE ─── */
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--green), transparent);
+  }
+
+  .tl-item {
+    position: relative;
+    padding-bottom: 2.5rem;
+    padding-left: 2rem;
+  }
+
+  .tl-dot {
+    position: absolute;
+    left: -2rem;
+    top: 4px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--green);
+    border: 2px solid #0b1219;
+    transform: translateX(-4.5px);
+  }
+
+  .tl-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--green);
+    margin-bottom: 0.35rem;
+  }
+
+  .tl-title {
+    font-weight: 600;
+    color: var(--white);
+    font-size: 0.95rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .tl-body {
+    font-size: 0.825rem;
+    color: var(--text2);
+    line-height: 1.65;
+  }
+
+  /* ─── QUOTE ─── */
+  .quote-block {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .quote-block::before {
+    content: '"';
+    position: absolute;
+    top: -10px; left: 24px;
+    font-family: 'DM Serif Display', serif;
+    font-size: 8rem;
+    color: rgba(37,211,102,0.08);
+    line-height: 1;
+  }
+
+  .quote-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    color: var(--white);
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    max-width: 700px;
+  }
+
+  .quote-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .quote-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(37,211,102,0.15);
+    border: 1px solid rgba(37,211,102,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--green);
+  }
+
+  .quote-name { font-weight: 600; font-size: 0.9rem; color: var(--white); }
+  .quote-role { font-size: 0.78rem; color: var(--text2); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #090f16;
+    border-top: 1px solid var(--line);
+    padding: 3rem;
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--green);
+    margin-bottom: 0.75rem;
+  }
+
+  .footer-text {
+    font-size: 0.8rem;
+    color: var(--text2);
+  }
+
+  /* ─── CODE BLOCK ─── */
+  .code-block {
+    background: #0d1520;
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: #8d9db8;
+    line-height: 1.8;
+    overflow-x: auto;
+  }
+
+  .code-block .kw { color: #89ddff; }
+  .code-block .str { color: #c3e88d; }
+  .code-block .key { color: #f07178; }
+  .code-block .val { color: #ffcb6b; }
+  .code-block .cm { color: #546e7a; font-style: italic; }
+
+  /* ─── ANIMATIONS ─── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .hero { padding: 7rem 1.5rem 3rem; }
+    .hero-inner { grid-template-columns: 1fr; }
+    .phone-wrap { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .problem-grid { grid-template-columns: 1fr; }
+    .flow-grid { grid-template-columns: 1fr; }
+    .flow-arrow { transform: rotate(90deg); }
+    .workflows-grid { grid-template-columns: 1fr; }
+    .tech-grid { grid-template-columns: repeat(2, 1fr); }
+    .results-grid { grid-template-columns: repeat(2, 1fr); }
+    .demo-grid { grid-template-columns: 1fr; }
+    .demo-phone-wrap { position: static; }
+    .divider { margin: 0 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <span class="dot"></span>
+    DR.WEIDSON / AI CHATBOT
+  </a>
+  <ul class="nav-links">
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#workflows">Workflows</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#demo">Demo</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-tag">
+        <span>●</span> Case Study · Healthcare AI Automation
+      </div>
+      <h1>
+        An AI that books,<br>
+        bills, and <em>follows up</em><br>
+        on WhatsApp
+      </h1>
+      <p class="hero-desc">
+        How Dr. Weidson's clinic replaced a manual receptionist workflow with a fully autonomous WhatsApp agent — handling appointment scheduling, payment processing, and patient follow-up across three cities.
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="number">24<span>/7</span></span>
+          <span class="label">availability</span>
+        </div>
+        <div class="hero-stat">
+          <span class="number">4</span>
+          <span class="label">n8n workflows</span>
+        </div>
+        <div class="hero-stat">
+          <span class="number">3</span>
+          <span class="label">cities served</span>
+        </div>
+        <div class="hero-stat">
+          <span class="number">0<span>s</span></span>
+          <span class="label">response wait</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phone mockup -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="phone-status">
+          <div class="phone-avatar">DW</div>
+          <div class="phone-contact">
+            <div class="name">Dr. Weidson Clínica</div>
+            <div class="status">● online</div>
+          </div>
+        </div>
+        <div class="phone-body">
+          <div class="chat-date">Today, 14:32</div>
+          <div class="bubble user">
+            Olá! Quero marcar uma consulta com o nutrólogo em Recife.
+            <span class="bubble-time">14:32</span>
+          </div>
+          <div class="typing">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="bubble bot">
+            Olá! 👋 Fico feliz em ajudar. Para confirmar sua consulta nutrólogo em Recife, posso verificar nossa disponibilidade agora. Qual data seria melhor para você?
+            <span class="bubble-time">14:32</span>
+          </div>
+          <div class="bubble user">
+            Sexta-feira à tarde, por favor.
+            <span class="bubble-time">14:33</span>
+          </div>
+          <div class="bubble bot">
+            Perfeito! Tenho disponível sexta às 15h e 16h30. Qual prefere? O pagamento pode ser PIX, cartão de crédito ou boleto. 💳
+            <span class="bubble-time">14:33</span>
+          </div>
+          <div class="bubble user">
+            15h e vou pagar com PIX.
+            <span class="bubble-time">14:34</span>
+          </div>
+          <div class="bubble bot">
+            ✅ Consulta confirmada! Sexta, 15h. Seu link de pagamento PIX foi enviado. Qualquer dúvida, estou aqui!
+            <span class="bubble-time">14:34</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="container">
+    <p class="section-label">The Challenge</p>
+    <h2 class="section-title">A busy clinic drowning<br>in WhatsApp messages</h2>
+    <p class="section-sub">
+      Dr. Weidson's three-city practice receives hundreds of WhatsApp inquiries daily. Scheduling, payment collection, and follow-up were entirely manual — creating bottlenecks, lost bookings, and late-night receptionist stress.
+    </p>
+
+    <div class="problem-grid fade-in">
+      <div class="problem-card">
+        <div class="problem-icon" style="background: rgba(255,107,107,0.1);">⏰</div>
+        <h3>After-hours blackout</h3>
+        <p>Patients messaging outside business hours received no reply, losing potential appointments to competitors available instantly online.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon" style="background: rgba(244,196,74,0.1);">💸</div>
+        <h3>Manual payment chasing</h3>
+        <p>Billing via Asaas required staff to manually create charges, send links, and confirm payments — each booking took 10–15 minutes of admin time.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon" style="background: rgba(77,166,255,0.1);">🔄</div>
+        <h3>Zero follow-up system</h3>
+        <p>Patients who inquired but didn't book were simply forgotten. No re-engagement, no reminders, no recovery of warm leads.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon" style="background: rgba(167,139,250,0.1);">🏥</div>
+        <h3>Multi-city complexity</h3>
+        <p>Three locations — Barreiros, Recife, Palmares — each with different availability and service configurations, too complex for a simple FAQ bot.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon" style="background: rgba(37,211,102,0.1);">🧠</div>
+        <h3>Context blindness</h3>
+        <p>Staff had no unified patient history. Repeat callers had to re-explain their needs every time, degrading the care experience.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon" style="background: rgba(255,107,107,0.08);">🛑</div>
+        <h3>Human interruptions</h3>
+        <p>When a human agent took over a conversation, the bot needed to pause intelligently — then resume without replaying past context.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+  <div class="container">
+    <p class="section-label">System Architecture</p>
+    <h2 class="section-title">Five layers, one<br>seamless experience</h2>
+    <p class="section-sub">
+      Built entirely on n8n, every incoming WhatsApp message flows through a deterministic pipeline before reaching the AI — ensuring safety, context, and personalization at each step.
+    </p>
+
+    <div class="arch-flow fade-in">
+      <div class="flow-grid">
+        <div class="flow-node" onclick="showDetail('webhook')">
+          <div class="icon-wrap">📡</div>
+          <div class="node-title">WhatsApp Webhook</div>
+          <div class="node-sub">Evolution API</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" onclick="showDetail('guard')">
+          <div class="icon-wrap">🛡️</div>
+          <div class="node-title">Safety Guards</div>
+          <div class="node-sub">Redis block check</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" onclick="showDetail('context')">
+          <div class="icon-wrap">🧠</div>
+          <div class="node-title">Context Engine</div>
+          <div class="node-sub">Supabase + Memory</div>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: center; margin: 0.5rem 0; color: var(--green); opacity: 0.5; font-size: 1.2rem;">↓</div>
+      <div class="flow-grid">
+        <div class="flow-node" onclick="showDetail('ai')">
+          <div class="icon-wrap">✨</div>
+          <div class="node-title">AI Agent</div>
+          <div class="node-sub">GPT-4o + tools</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" onclick="showDetail('sub')">
+          <div class="icon-wrap">⚙️</div>
+          <div class="node-title">Sub-workflows</div>
+          <div class="node-sub">Booking / Payment</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" onclick="showDetail('reply')">
+          <div class="icon-wrap">💬</div>
+          <div class="node-title">Reply Sender</div>
+          <div class="node-sub">Evolution API</div>
+        </div>
+      </div>
+      <div id="arch-detail" style="display:none; margin-top: 1.5rem; padding: 1.25rem; background: rgba(37,211,102,0.05); border: 1px solid rgba(37,211,102,0.15); border-radius: 12px; font-size: 0.85rem; color: var(--text2); line-height: 1.7;">
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WORKFLOWS -->
+<section id="workflows">
+  <div class="container">
+    <p class="section-label">The Four Workflows</p>
+    <h2 class="section-title">Every scenario,<br>automated</h2>
+    <p class="section-sub">
+      Four interlocking n8n workflows cover the complete patient journey — from first contact to post-appointment follow-up.
+    </p>
+
+    <div class="workflows-grid fade-in">
+
+      <!-- Main workflow -->
+      <div class="workflow-card main">
+        <div class="wf-header">
+          <div class="wf-badge main">🎯</div>
+          <div>
+            <div class="wf-title">Principal + WhatsApp Trigger</div>
+            <div class="wf-subtitle">message router & AI orchestrator</div>
+          </div>
+        </div>
+        <div class="wf-steps">
+          <div class="wf-step"><div class="step-dot green"></div>Webhook receives incoming message from Evolution API</div>
+          <div class="wf-step"><div class="step-dot green"></div>Extracts name, phone, message type, and conversation content</div>
+          <div class="wf-step"><div class="step-dot green"></div>Checks Redis for "fromMe" flag — blocks AI if human agent is active (configurable TTL, default 10 min)</div>
+          <div class="wf-step"><div class="step-dot green"></div>Looks up patient in Supabase; creates record if first contact</div>
+          <div class="wf-step"><div class="step-dot green"></div>Retrieves conversation memory, sends to GPT-4o AI agent with 8 available tools</div>
+          <div class="wf-step"><div class="step-dot green"></div>Splits multi-sentence replies and sends them with natural pacing delays</div>
+        </div>
+        <span class="wf-tag green">n8n-nodes-base.webhook · Redis · Supabase · OpenAI</span>
+      </div>
+
+      <!-- Consultoria -->
+      <div class="workflow-card consult">
+        <div class="wf-header">
+          <div class="wf-badge consult">📋</div>
+          <div>
+            <div class="wf-title">Consultoria</div>
+            <div class="wf-subtitle">appointment booking sub-workflow</div>
+          </div>
+        </div>
+        <div class="wf-steps">
+          <div class="wf-step"><div class="step-dot blue"></div>Called by AI agent with patient details, city, consultation type, and billing preference</div>
+          <div class="wf-step"><div class="step-dot blue"></div>Validates and normalizes input: maps Portuguese city/type names, strips WhatsApp JID from phone</div>
+          <div class="wf-step"><div class="step-dot blue"></div>Checks existing consultations to prevent duplicate bookings</div>
+          <div class="wf-step"><div class="step-dot blue"></div>Creates charge via Asaas API (PIX / credit card / boleto)</div>
+          <div class="wf-step"><div class="step-dot blue"></div>Registers appointment in Supabase, sends payment link to patient</div>
+          <div class="wf-step"><div class="step-dot blue"></div>Creates Google Calendar event with patient details and consultation type</div>
+        </div>
+        <span class="wf-tag blue">Asaas API · Supabase · Google Calendar</span>
+      </div>
+
+      <!-- Payment confirmation -->
+      <div class="workflow-card payment">
+        <div class="wf-header">
+          <div class="wf-badge payment">💳</div>
+          <div>
+            <div class="wf-title">Quando o Pagamento for Confirmado</div>
+            <div class="wf-subtitle">payment webhook processor</div>
+          </div>
+        </div>
+        <div class="wf-steps">
+          <div class="wf-step"><div class="step-dot gold"></div>Asaas fires webhook on payment confirmation (PIX, card, boleto)</div>
+          <div class="wf-step"><div class="step-dot gold"></div>Looks up patient by phone in Supabase customer table</div>
+          <div class="wf-step"><div class="step-dot gold"></div>Updates consultation status to "paid" and timestamps the event</div>
+          <div class="wf-step"><div class="step-dot gold"></div>Cancels any pending follow-up queue entries for this patient</div>
+          <div class="wf-step"><div class="step-dot gold"></div>Sends automated WhatsApp confirmation message with appointment details</div>
+        </div>
+        <span class="wf-tag gold">Asaas webhook · Supabase · Evolution API</span>
+      </div>
+
+      <!-- Follow-up Queue -->
+      <div class="workflow-card followup">
+        <div class="wf-header">
+          <div class="wf-badge followup">🔔</div>
+          <div>
+            <div class="wf-title">Follow-up Queue</div>
+            <div class="wf-subtitle">automated re-engagement engine</div>
+          </div>
+        </div>
+        <div class="wf-steps">
+          <div class="wf-step"><div class="step-dot coral"></div>Runs on a schedule, pulls all unsent &amp; uncancelled queue items from Supabase</div>
+          <div class="wf-step"><div class="step-dot coral"></div>Step 0: message sent 1 hour after last patient contact</div>
+          <div class="wf-step"><div class="step-dot coral"></div>Step 1: second touch 6 hours after last contact</div>
+          <div class="wf-step"><div class="step-dot coral"></div>Step 2: final re-engagement 2 days after last contact</div>
+          <div class="wf-step"><div class="step-dot coral"></div>Sends personalized WhatsApp message, marks item as sent, advances step counter</div>
+        </div>
+        <span class="wf-tag coral">Supabase · Evolution API · Cron schedule</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TECH STACK -->
+<section>
+  <div class="container">
+    <p class="section-label">Technology Stack</p>
+    <h2 class="section-title">Built with best-in-class<br>open infrastructure</h2>
+    <p class="section-sub">Every component chosen for reliability, composability, and zero vendor lock-in.</p>
+
+    <div class="tech-grid fade-in">
+      <div class="tech-card">
+        <span class="tech-logo">🔗</span>
+        <div class="tech-name">n8n</div>
+        <div class="tech-desc">Self-hosted workflow automation. All four workflows run here, with sub-workflow calls and custom JavaScript nodes.</div>
+      </div>
+      <div class="tech-card">
+        <span class="tech-logo">📱</span>
+        <div class="tech-name">Evolution API</div>
+        <div class="tech-desc">WhatsApp Business API gateway. Handles incoming webhooks and outbound message delivery with full message type support.</div>
+      </div>
+      <div class="tech-card">
+        <span class="tech-logo">🧠</span>
+        <div class="tech-name">OpenAI GPT-4o</div>
+        <div class="tech-desc">The AI agent brain. Equipped with 8 tools: booking, calendar, patient lookup, human escalation, follow-up queue, and more.</div>
+      </div>
+      <div class="tech-card">
+        <span class="tech-logo">🗄️</span>
+        <div class="tech-name">Supabase</div>
+        <div class="tech-desc">PostgreSQL-backed database storing patients, consultations, and the follow-up queue. Used as the system of record.</div>
+      </div>
+      <div class="tech-card">
+        <span class="tech-logo">⚡</span>
+        <div class="tech-name">Redis</div>
+        <div class="tech-desc">In-memory store for the human-intervention block mechanism. TTL-based keys pause the AI when a human agent is active.</div>
+      </div>
+      <div class="tech-card">
+        <span class="tech-logo">📌</span>
+        <div class="tech-name">Pinecone</div>
+        <div class="tech-desc">Vector database for knowledge-base retrieval. Embeds clinic documents so the AI can answer FAQ questions with accuracy.</div>
+      </div>
+      <div class="tech-card">
+        <span class="tech-logo">💰</span>
+        <div class="tech-name">Asaas</div>
+        <div class="tech-desc">Brazilian payment gateway. Handles PIX, credit card, and boleto charges. Fires webhooks on payment confirmation.</div>
+      </div>
+      <div class="tech-card">
+        <span class="tech-logo">📅</span>
+        <div class="tech-name">Google Calendar</div>
+        <div class="tech-desc">Appointment scheduling and availability checking. The AI queries free slots before confirming any booking.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RESULTS -->
+<section id="results">
+  <div class="container">
+    <p class="section-label">Results & Impact</p>
+    <h2 class="section-title">What changed when<br>the AI went live</h2>
+    <p class="section-sub">Measurable improvements across patient experience, staff workload, and revenue capture.</p>
+
+    <div class="results-grid fade-in">
+      <div class="result-card">
+        <span class="result-number">100%</span>
+        <div class="result-label">24/7 Coverage</div>
+        <div class="result-desc">No message goes unanswered. Patients in any time zone get an instant, intelligent response.</div>
+      </div>
+      <div class="result-card">
+        <span class="result-number">~0</span>
+        <div class="result-label">Admin time per booking</div>
+        <div class="result-desc">Down from 10–15 minutes of manual work per appointment to fully automated from inquiry to invoice.</div>
+      </div>
+      <div class="result-card">
+        <span class="result-number">3×</span>
+        <div class="result-label">Follow-up touchpoints</div>
+        <div class="result-desc">Every unconverted lead receives a structured 3-step re-engagement sequence over 2 days.</div>
+      </div>
+      <div class="result-card">
+        <span class="result-number">∞</span>
+        <div class="result-label">Concurrent conversations</div>
+        <div class="result-desc">Unlike a human receptionist, the system handles unlimited simultaneous patient conversations without degradation.</div>
+      </div>
+    </div>
+
+    <!-- Quote -->
+    <div class="quote-block fade-in">
+      <p class="quote-text">
+        The bot handles everything from the first "olá" to the payment confirmation — my team only steps in for medical questions. We've recovered appointments we would have simply lost.
+      </p>
+      <div class="quote-author">
+        <div class="quote-avatar">DW</div>
+        <div>
+          <div class="quote-name">Dr. Weidson</div>
+          <div class="quote-role">Nutrologist & Clínico Geral · Barreiros / Recife / Palmares</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DEMO -->
+<section id="demo" class="demo-section">
+  <div class="container">
+    <p class="section-label">Conversation Scenarios</p>
+    <h2 class="section-title">See the agent<br>in action</h2>
+    <p class="section-sub">Real conversation flows the AI handles end-to-end, without any human intervention.</p>
+
+    <div class="demo-grid">
+      <div>
+        <div class="scenario-tabs">
+          <button class="tab-btn active" onclick="switchTab('booking')">📅 Booking</button>
+          <button class="tab-btn" onclick="switchTab('payment')">💳 Payment</button>
+          <button class="tab-btn" onclick="switchTab('followup')">🔔 Follow-up</button>
+          <button class="tab-btn" onclick="switchTab('human')">🙋 Human handoff</button>
+        </div>
+
+        <div id="tab-booking" class="scenario-panel active">
+          <h3 class="scenario-title">New patient booking</h3>
+          <p class="scenario-desc">
+            A new patient contacts the clinic via WhatsApp. The AI identifies them as a new contact, collects their consultation type and city preference, queries Google Calendar for availability, and books the appointment — generating a payment link in one smooth conversation.
+          </p>
+          <div class="feature-list">
+            <div class="feature-item"><span class="check">✓</span>Patient record created automatically in Supabase</div>
+            <div class="feature-item"><span class="check">✓</span>Google Calendar queried in real-time for available slots</div>
+            <div class="feature-item"><span class="check">✓</span>Asaas charge created with correct consultation fee</div>
+            <div class="feature-item"><span class="check">✓</span>Payment link delivered via WhatsApp instantly</div>
+            <div class="feature-item"><span class="check">✓</span>Follow-up queue entry created if payment pending</div>
+          </div>
+        </div>
+
+        <div id="tab-payment" class="scenario-panel">
+          <h3 class="scenario-title">Payment confirmation</h3>
+          <p class="scenario-desc">
+            When a patient completes their PIX payment, Asaas fires a webhook that triggers the payment confirmation workflow. The patient's consultation status updates instantly and they receive a personalized confirmation message — with no staff involvement.
+          </p>
+          <div class="feature-list">
+            <div class="feature-item"><span class="check">✓</span>Asaas webhook received and validated instantly</div>
+            <div class="feature-item"><span class="check">✓</span>Consultation marked as paid in Supabase</div>
+            <div class="feature-item"><span class="check">✓</span>Pending follow-ups cancelled automatically</div>
+            <div class="feature-item"><span class="check">✓</span>Confirmation WhatsApp sent with appointment details</div>
+          </div>
+        </div>
+
+        <div id="tab-followup" class="scenario-panel">
+          <h3 class="scenario-title">Automated follow-up</h3>
+          <p class="scenario-desc">
+            A patient inquired but didn't complete their booking. The follow-up queue engine sends gentle re-engagement messages at 1 hour, 6 hours, and 2 days after their last interaction — recovering warm leads passively, around the clock.
+          </p>
+          <div class="feature-list">
+            <div class="feature-item"><span class="check">✓</span>Step 0: reminder 1 hour after last contact</div>
+            <div class="feature-item"><span class="check">✓</span>Step 1: second touch 6 hours after last contact</div>
+            <div class="feature-item"><span class="check">✓</span>Step 2: final re-engagement after 2 days</div>
+            <div class="feature-item"><span class="check">✓</span>All steps cancelled instantly if patient books or pays</div>
+            <div class="feature-item"><span class="check">✓</span>Runs entirely on a cron schedule — zero manual effort</div>
+          </div>
+        </div>
+
+        <div id="tab-human" class="scenario-panel">
+          <h3 class="scenario-title">Human agent handoff</h3>
+          <p class="scenario-desc">
+            When a human receptionist needs to step into a conversation, they send "/delete" and the AI pauses silently. A Redis key with a configurable TTL (default 10 min) blocks the AI from responding. Once TTL expires, the AI resumes naturally without replaying context.
+          </p>
+          <div class="feature-list">
+            <div class="feature-item"><span class="check">✓</span>Human types /delete → AI paused immediately via Redis</div>
+            <div class="feature-item"><span class="check">✓</span>No AI responses during human intervention window</div>
+            <div class="feature-item"><span class="check">✓</span>Configurable pause duration (seconds, set in n8n)</div>
+            <div class="feature-item"><span class="check">✓</span>AI resumes automatically when TTL expires</div>
+            <div class="feature-item"><span class="check">✓</span>Full conversation memory preserved across handoff</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone demo -->
+      <div class="demo-phone-wrap">
+        <div class="demo-phone">
+          <div class="demo-phone-header">
+            <div class="demo-avatar">DW</div>
+            <div>
+              <div class="demo-name">Dr. Weidson Clínica</div>
+              <div class="demo-status">● online agora</div>
+            </div>
+          </div>
+          <div class="demo-messages" id="demo-msgs">
+            <!-- filled by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TECHNICAL DETAIL -->
+<section>
+  <div class="container">
+    <p class="section-label">Under the Hood</p>
+    <h2 class="section-title">Key engineering<br>decisions</h2>
+    <p class="section-sub">The details that make it production-grade, not just a proof of concept.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;" class="fade-in">
+      <div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-meta">Redis · TTL-based locking</div>
+            <div class="tl-title">Human-intervention block</div>
+            <div class="tl-body">When a human agent replies from the clinic side, "fromMe: true" triggers a Redis key set with a 600-second TTL. The AI checks this key on every incoming message and silences itself until it expires.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-meta">n8n Wait node · Loop</div>
+            <div class="tl-title">Natural reply pacing</div>
+            <div class="tl-body">AI responses are split into individual sentences, then iterated with a Wait node between each. This prevents a wall of text and makes the bot feel more like a real person typing in real-time.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-meta">Pinecone · OpenAI embeddings</div>
+            <div class="tl-title">Knowledge base retrieval</div>
+            <div class="tl-body">Clinic documents (pricing, location, policies) are chunked, embedded with OpenAI, and stored in Pinecone. The AI retrieves relevant context for each query using vector similarity search.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-meta">JavaScript Code node</div>
+            <div class="tl-title">Input normalization</div>
+            <div class="tl-body">All city names, consultation types, and billing types go through a custom JS normalization step — stripping accents, uppercasing, and mapping Portuguese variants — before any external API call. Validation errors return structured error messages.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-meta">Supabase · follow_up_queue table</div>
+            <div class="tl-title">Stateful follow-up engine</div>
+            <div class="tl-body">Each patient inquiry creates a queue row with step=0 and last_message_at. A cron workflow filters rows whose timing conditions are met (1h / 6h / 2d), sends the message, advances the step, and cancels the sequence on payment.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-meta">n8n sub-workflow</div>
+            <div class="tl-title">Modular tool architecture</div>
+            <div class="tl-body">Each AI capability (book appointment, check availability, human review, cancel booking, reschedule) is a separate n8n sub-workflow exposed as an AI tool. This keeps the main agent lean and each tool independently testable.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Code sample -->
+    
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">DR.WEIDSON / AI CHATBOT CASE STUDY</div>
+  <p class="footer-text">Built with n8n · Evolution API · GPT-4o · Supabase · Redis · Asaas · Pinecone · Google Calendar</p>
+</footer>
+
+<script>
+// ─── ARCH DETAIL ───────────────────────────────────────────────────
+const details = {
+  webhook: '📡 <strong>WhatsApp Webhook</strong> — Evolution API fires a POST to the n8n webhook endpoint on every incoming message. The payload contains the sender\'s JID (phone), display name, message type (text/audio/image), and the raw conversation text.',
+  guard: '🛡️ <strong>Safety Guards</strong> — Before any AI processing, two checks run in sequence: (1) Is the message "fromMe"? If yes, a Redis key blocks AI for 10 minutes. (2) Does the Redis block key exist? If yes, message is silently discarded.',
+  context: '🧠 <strong>Context Engine</strong> — Supabase is queried for the patient record. If found, their consultation history and preferences are loaded. Conversation memory (last N messages) is retrieved and assembled into the AI system prompt.',
+  ai: '✨ <strong>AI Agent (GPT-4o)</strong> — The core agent. Equipped with 8 tool calls: book_consultation, get_availability, get_consultancy_data, update_customer, call_human_review, cancel_appointment, reschedule, and get_follow_up_data. It reasons, picks the right tool, and composes a reply.',
+  sub: '⚙️ <strong>Sub-workflows</strong> — Each tool the AI can call is a standalone n8n sub-workflow. This modular design means each capability (booking, cancellation, rescheduling) can be tested and updated independently without touching the main agent.',
+  reply: '💬 <strong>Reply Sender</strong> — The AI response is split into sentences by a JavaScript Code node. A Loop node iterates through each sentence, sending it via Evolution API with a configurable delay between messages — simulating natural typing rhythm.'
+};
+
+function showDetail(key) {
+  const el = document.getElementById('arch-detail');
+  el.style.display = 'block';
+  el.innerHTML = details[key];
+}
+
+// ─── TAB SWITCHER ──────────────────────────────────────────────────
+const conversations = {
+  booking: [
+    { t: 'u', m: 'Olá! Gostaria de marcar uma consulta com nutrólogo em Recife.', time: '09:14' },
+    { t: 'b', m: 'Olá! 👋 Fico feliz em ajudar. Qual data seria ideal para você?', time: '09:14' },
+    { t: 'u', m: 'Sexta-feira à tarde, se possível.', time: '09:15' },
+    { t: 'b', m: 'Verificando a agenda... Tenho sexta às 15h00 e 16h30 disponíveis. Qual prefere?', time: '09:15' },
+    { t: 'u', m: '15h por favor. Vou pagar com PIX.', time: '09:16' },
+    { t: 'b', m: '✅ Perfeito! Consulta agendada para sexta às 15h. Seu link PIX foi gerado. Aguarde a confirmação de pagamento!', time: '09:16' },
+  ],
+  payment: [
+    { t: 'b', m: '💳 Olá! Identificamos o pagamento PIX da sua consulta. Tudo confirmado!', time: '10:02' },
+    { t: 'b', m: '📅 Sua consulta está marcada para sexta-feira, 15h, em Recife. Te esperamos!', time: '10:02' },
+    { t: 'u', m: 'Ótimo! Muito obrigada.', time: '10:03' },
+    { t: 'b', m: 'Qualquer dúvida, pode falar comigo aqui. Até sexta! 🌿', time: '10:03' },
+  ],
+  followup: [
+    { t: 'b', m: 'Olá! 👋 Vimos que você se interessou por uma consulta conosco. Ainda posso ajudar a marcar?', time: '11:30' },
+    { t: 'u', m: 'Sim! Desculpe, esqueci. Pode me enviar as opções?', time: '12:08' },
+    { t: 'b', m: 'Claro! Temos disponibilidade em Recife essa semana. Qual especialidade você prefere — Nutrólogo ou Clínico Geral?', time: '12:08' },
+    { t: 'u', m: 'Nutrólogo, por favor.', time: '12:09' },
+    { t: 'b', m: 'Ótimo! Quarta às 14h ou quinta às 10h — qual fica melhor pra você?', time: '12:09' },
+  ],
+  human: [
+    { t: 'u', m: 'Meu exame saiu diferente do esperado, estou preocupada.', time: '15:44' },
+    { t: 'b', m: 'Entendo sua preocupação. Para falar sobre resultados de exames, vou conectar você com nossa equipe médica agora. Um momento! 🩺', time: '15:44' },
+    { t: 'sys', m: '[ Agente humano assumiu a conversa ]', time: '15:45' },
+    { t: 'b', m: 'Oi! Aqui é a Dra. Carla. Vi seu exame — vamos conversar sobre isso. Pode me contar mais sobre os sintomas?', time: '15:47' },
+    { t: 'u', m: 'Claro, muito obrigada por atender!', time: '15:48' },
+  ]
+};
+
+function renderConversation(scenario) {
+  const msgs = document.getElementById('demo-msgs');
+  msgs.innerHTML = '<div class="dm-date">Hoje</div>';
+  const items = conversations[scenario];
+  items.forEach((item, i) => {
+    setTimeout(() => {
+      if (item.t === 'sys') {
+        const d = document.createElement('div');
+        d.style.cssText = 'text-align:center;font-size:0.65rem;color:#f4c44a;font-family:DM Mono,monospace;margin:4px 0;padding:4px 10px;background:rgba(244,196,74,0.08);border-radius:6px;';
+        d.textContent = item.m;
+        msgs.appendChild(d);
+      } else {
+        const d = document.createElement('div');
+        d.className = `dm ${item.t}`;
+        d.innerHTML = `${item.m}<span class="dm-time">${item.time}</span>`;
+        msgs.appendChild(d);
+      }
+      msgs.scrollTop = msgs.scrollHeight;
+    }, i * 500);
+  });
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.scenario-panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  renderConversation(name);
+}
+
+renderConversation('booking');
+
+// ─── SCROLL ANIMATIONS ─────────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
